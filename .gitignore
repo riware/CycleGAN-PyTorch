@@ -121,6 +121,7 @@ dmypy.json
 .DS_Store
 
 # custom
+data/stain2newstaintest
 data/ae_photos
 data/apple2orange
 data/cezanne2photo
@@ -136,6 +137,7 @@ data/vangogh2photo
 
 outputs/
 results/
+weights/ 
 
 weights/ae_photos
 weights/apple2orange

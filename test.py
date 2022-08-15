@@ -85,8 +85,12 @@ netG_A2B = Generator().to(device)
 netG_B2A = Generator().to(device)
 
 # Load state dicts
-netG_A2B.load_state_dict(torch.load(os.path.join("weights", str(args.dataset), "netG_A2B.pth")))
-netG_B2A.load_state_dict(torch.load(os.path.join("weights", str(args.dataset), "netG_B2A.pth")))
+if device == torch.device("cpu"):
+    netG_A2B.load_state_dict(torch.load(os.path.join("weights", str(args.dataset), "netG_A2B.pth"),map_location=torch.device('cpu')))
+    netG_B2A.load_state_dict(torch.load(os.path.join("weights", str(args.dataset), "netG_B2A.pth"),map_location=torch.device('cpu')))
+else:
+    netG_A2B.load_state_dict(torch.load(os.path.join("weights", str(args.dataset), "netG_A2B.pth")))
+    netG_B2A.load_state_dict(torch.load(os.path.join("weights", str(args.dataset), "netG_B2A.pth")))
 
 # Set model mode
 netG_A2B.eval()

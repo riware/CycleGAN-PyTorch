@@ -3,3 +3,8 @@ tqdm
 matplotlib
 opencv-python
 numpy
+torch
+torchvision
+openslide-python
+scikit-image
+opencv-python
