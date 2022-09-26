@@ -122,6 +122,7 @@ dmypy.json
 
 # custom
 data/stain2newstaintest
+data/worststain2beststain_v1
 data/ae_photos
 data/apple2orange
 data/cezanne2photo

@@ -3,15 +3,22 @@ import numpy as np
 import cv2
 from skimage import io
 
+############### Inputs ###############
 
-IMAGE_FILE = "/home/riware/Documents/Mittal_Lab/kidney_project/VGG16_model_data/model18/altered ROIs/16 A1-9-TRI-K - 2022-03-29 10.12.59_1 - Copy_ndpi_pixel(138000, 24000)_size15000_redpertscale1.0bias-0.5.tiff"
-DATA_DIRECTORY = "/home/riware/Documents/Mittal_Lab/cycle_gan/dataset_test"
-x_tile_size = 768 #patch size
-y_tile_size = 768 #patch size
-threshold = 25  # allows for 25% background
-color_delta = 50  # defines distance from 255 considered background
+# File to extract patches from
+IMAGE_FILE = "/home/riware/Documents/Mittal_Lab/kidney_project/VGG16_model_data/model18/style_data/BR1-2039-A-1-TRI - 2022-08-10 13.02.09_ndpi_pixel(58000, 21000)_size6000_patch48.tiff"
+
+# Directory to place patches
+DATA_DIRECTORY = "/home/riware/Documents/Mittal_Lab/cyclegan/tiles_by_case"
+
+# Details of extraction
+x_tile_size = 512 #patch size
+y_tile_size = 512 #patch size
+threshold = 60  # 25 allows for 25% background
+color_delta = 40  # defines distance from 255 considered background
 overlap = .40 # .40 indicates 60% overlap
 
+############### Percent Background Calc ###############
 def percent_background(roi_array, color_delta):
     roi_width = roi_array.shape[0]
     roi_height = roi_array.shape[1]
@@ -24,6 +31,8 @@ def percent_background(roi_array, color_delta):
     percent_background = num_background_pix / total_pixels * 100
     return percent_background
 
+############### Extraction ###############
+
 # Create folder for case, if doesn't exist
 case = os.path.basename(IMAGE_FILE)
 case = os.path.splitext(case)[0]
@@ -35,8 +44,13 @@ else:
     os.mkdir(CASE_DIRECTORY)
 
 # Create a folder in the case folder for this patch size
-PATCH_DIRECTORY = os.path.join(CASE_DIRECTORY, f"patch_{x_tile_size}")
-os.mkdir(PATCH_DIRECTORY)
+existing_patch_sizes = os.listdir(CASE_DIRECTORY)
+patch_size = f"{x_tile_size}x{y_tile_size}"
+PATCH_DIRECTORY = os.path.join(CASE_DIRECTORY, f"patch_{patch_size}")
+if patch_size in existing_cases:
+    pass
+else:
+    os.mkdir(PATCH_DIRECTORY)
 
 # Open tiff with openslide and select ROI
 tiff_file = cv2.imread(IMAGE_FILE)

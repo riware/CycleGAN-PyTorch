@@ -3,9 +3,15 @@ import numpy as np
 import openslide
 from skimage import io
 
+############### Inputs ###############
 
+# File to extract patches from
 IMAGE_FILE = "/home/riware/Documents/Mittal_Lab/kidney_project/all_model_data/already extracted ndpis/5 A1-9-TRI - 2022-04-04 20.35.20_1 - Copy.ndpi"
+
+# Directory to place patches
 DATA_DIRECTORY = "/home/riware/Documents/Mittal_Lab/cycle_gan/dataset_test"
+
+# Details of extraction
 pyramid_tier = 0
 ndpi_x_tile_size = 10000 #size of ndpi in active memory for extraction - choose based off of available memory
 ndpi_y_tile_size = 10000 #size of ndpi in active memory for extraction - choose based off of available memory
@@ -15,6 +21,7 @@ threshold = 25  # allows for 25% background
 color_delta = 50  # defines distance from 255 considered background
 overlap = .40 # .40 indicates 60% overlap
 
+############### Percent Background Calc ###############
 def percent_background(roi_array, color_delta):
     roi_width = roi_array.shape[0]
     roi_height = roi_array.shape[1]
@@ -27,6 +34,8 @@ def percent_background(roi_array, color_delta):
     percent_background = num_background_pix / total_pixels * 100
     return percent_background
 
+############### Extraction ###############
+
 # Create folder for case, if doesn't exist
 case = os.path.basename(IMAGE_FILE)
 case = os.path.splitext(case)[0]
@@ -37,6 +46,7 @@ if os.path.basename(CASE_DIRECTORY) in existing_cases:
 else:
     os.mkdir(CASE_DIRECTORY)
 
+# Create a folder in the case folder for this patch size, if it doesn't exist
 existing_patch_sizes = os.listdir(CASE_DIRECTORY)
 patch_size = f"{x_tile_size}x{y_tile_size}"
 PATCH_DIRECTORY = os.path.join(CASE_DIRECTORY, patch_size)
